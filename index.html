@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Распознавание цифр</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    canvas {
+      border: 2px solid black;
+      background-color: #FFFFFF; /* Белый фон для рисования */
+      cursor: crosshair; /* Курсор в виде креста */
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Нарисуйте цифру и узнайте результат!</h1>
+  <canvas id="drawing-canvas" width="280" height="280"></canvas>
+  <br>
+  <button id="clear-button">Очистить</button>
+  <button id="predict-button">Распознать</button>
+  <p>Результат: <span id="result">?</span></p>
+  <p id="status">Загрузка модели...</p>
+
+  <!-- Подключаем TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="script.js"></script>
+</body>
+</html>
