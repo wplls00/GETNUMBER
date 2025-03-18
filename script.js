@@ -65,6 +65,7 @@ predictButton.addEventListener('click', async () => {
 
   // Получаем предсказание
   const imageTensor = preprocessCanvas(canvas);
+  console.log('Форма тензора:', imageTensor.shape);
   const prediction = await model.predict(imageTensor).data();
   const result = prediction.indexOf(Math.max(...prediction)); // Находим наиболее вероятную цифру
   resultSpan.textContent = result; // Показываем результат
