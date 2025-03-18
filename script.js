@@ -5,7 +5,7 @@ const clearButton = document.getElementById('clear-button');
 const predictButton = document.getElementById('predict-button');
 const resultSpan = document.getElementById('result');
 const statusSpan = document.getElementById('status');
-
+console.log('Входной тензор:', imageTensor.arraySync());
 let isDrawing = false;
 
 // Очищаем canvas белым цветом
