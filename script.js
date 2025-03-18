@@ -1,3 +1,5 @@
+// Очищаем canvas при загрузке страницы
+clearCanvas();
 // Получаем элементы страницы
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
@@ -11,8 +13,14 @@ let isDrawing = false;
 function clearCanvas() {
   ctx.fillStyle = '#FFFFFF'; // Белый фон
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  console.log('Canvas очищен:', ctx.getImageData(0, 0, canvas.width, canvas.height).data.every(pixel => pixel === 255));
 }
 
+// Кнопка "Очистить"
+clearButton.addEventListener('click', () => {
+  clearCanvas();
+  resultSpan.textContent = '?';
+});
 // Обработчики событий для рисования
 canvas.addEventListener('mousedown', () => isDrawing = true);
 canvas.addEventListener('mouseup', () => isDrawing = false);
@@ -25,7 +33,7 @@ function draw(event) {
   const y = event.clientY - rect.top;
 
   ctx.fillStyle = '#000000'; // Чёрный цвет
-  ctx.fillRect(x, y, 8, 8); // Увеличиваем размер кисти до 25x25
+  ctx.fillRect(x, y, 20, 20); // Увеличиваем размер кисти до 25x25
 }
 
 // Загружаем модель как Graph Model
@@ -51,7 +59,7 @@ function preprocessCanvas(canvas) {
       .expandDims(0);                                // Добавляем размерность batch (форма [1, 28, 28, 1])
 
     console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение для формы
-    console.log('Значения тензора:', tensor.arraySync()); // Отладочное сообщение для значений
+    console.log('Значения тензора:', tensor.value()); // Отладочное сообщение для значений
     return tensor;
   });
 }
@@ -81,12 +89,13 @@ function visualizeTensor(tensor) {
       imageData.data[index + 3] = 255;       // A
     }
   }
-
+  
+const tensor = preprocessCanvas(canvas);
+visualizeTensor(tensor);
+  
   ctx.putImageData(imageData, 0, 0);
   document.body.appendChild(canvas); // Добавляем canvas на страницу
 }
-  const tensor = preprocessCanvas(canvas);
-visualizeTensor(tensor);
   // Получаем предсказание
   const imageTensor = preprocessCanvas(canvas);
   console.log('Форма тензора:', imageTensor.shape); // Отладочное сообщение
@@ -95,8 +104,3 @@ visualizeTensor(tensor);
   resultSpan.textContent = result; // Показываем результат
 });
 
-// Кнопка "Очистить"
-clearButton.addEventListener('click', () => {
-  clearCanvas();
-  resultSpan.textContent = '?';
-});
