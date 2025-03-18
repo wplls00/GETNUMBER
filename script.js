@@ -25,7 +25,7 @@ function draw(event) {
   const y = event.clientY - rect.top;
 
   ctx.fillStyle = '#000000'; // Чёрный цвет
-  ctx.fillRect(x, y, 15, 15); // Рисуем квадраты размером 15x15
+  ctx.fillRect(x, y, 25, 25); // Рисуем квадраты размером 15x15
 }
 
 // Загружаем модель как Graph Model
