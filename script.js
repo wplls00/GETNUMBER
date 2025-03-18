@@ -35,7 +35,6 @@ let model;
   try {
     const modelUrl = './web_model/model.json'; // Убедитесь, что путь правильный
     model = await tf.loadGraphModel(modelUrl);
-    console.log('Модель успешно загружена!');
     statusSpan.textContent = 'Модель загружена! Можно рисовать.';
   } catch (error) {
     console.error('Ошибка загрузки модели:', error);
@@ -52,6 +51,8 @@ function preprocessCanvas(canvas) {
       .toFloat()
       .div(255.0)                                    // Нормализуем значения пикселей
       .expandDims(0);                                // Добавляем размерность batch (форма [1, 28, 28, 1])
+    
+    console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение
     return tensor;
   });
 }
