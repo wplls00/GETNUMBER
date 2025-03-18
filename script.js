@@ -1,5 +1,6 @@
 // Очищаем canvas при загрузке страницы
 clearCanvas();
+
 // Получаем элементы страницы
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
@@ -21,6 +22,7 @@ clearButton.addEventListener('click', () => {
   clearCanvas();
   resultSpan.textContent = '?';
 });
+
 // Обработчики событий для рисования
 canvas.addEventListener('mousedown', () => isDrawing = true);
 canvas.addEventListener('mouseup', () => isDrawing = false);
@@ -33,7 +35,7 @@ function draw(event) {
   const y = event.clientY - rect.top;
 
   ctx.fillStyle = '#000000'; // Чёрный цвет
-  ctx.fillRect(x, y, 20, 20); // Увеличиваем размер кисти до 25x25
+  ctx.fillRect(x, y, 20, 20); // Размер кисти
 }
 
 // Загружаем модель как Graph Model
@@ -49,6 +51,7 @@ let model;
   }
 })();
 
+// Предобработка изображения
 function preprocessCanvas(canvas) {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   return tf.tidy(() => {
@@ -59,17 +62,12 @@ function preprocessCanvas(canvas) {
       .expandDims(0);                                // Добавляем размерность batch (форма [1, 28, 28, 1])
 
     console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение для формы
-    console.log('Значения тензора:', tensor.value()); // Отладочное сообщение для значений
+    console.log('Значения тензора:', tensor.arraySync()); // Отладочное сообщение для значений
     return tensor;
   });
 }
 
-// Кнопка "Распознать"
-predictButton.addEventListener('click', async () => {
-  if (!model) {
-    alert('Модель ещё не загружена. Пожалуйста, подождите.');
-    return;
-  }
+// Визуализация входного тензора
 function visualizeTensor(tensor) {
   const canvas = document.createElement('canvas');
   canvas.width = 28;
@@ -89,18 +87,27 @@ function visualizeTensor(tensor) {
       imageData.data[index + 3] = 255;       // A
     }
   }
-  
-const tensor = preprocessCanvas(canvas);
-visualizeTensor(tensor);
-  
+
   ctx.putImageData(imageData, 0, 0);
   document.body.appendChild(canvas); // Добавляем canvas на страницу
 }
-  // Получаем предсказание
+
+// Кнопка "Распознать"
+predictButton.addEventListener('click', async () => {
+  if (!model) {
+    alert('Модель ещё не загружена. Пожалуйста, подождите.');
+    return;
+  }
+
+  // Предобработка изображения
   const imageTensor = preprocessCanvas(canvas);
+
+  // Визуализация входного тензора
+  visualizeTensor(imageTensor);
+
+  // Получаем предсказание
   console.log('Форма тензора:', imageTensor.shape); // Отладочное сообщение
   const prediction = await model.predict(imageTensor).data();
   const result = prediction.indexOf(Math.max(...prediction)); // Находим наиболее вероятную цифру
   resultSpan.textContent = result; // Показываем результат
 });
-
