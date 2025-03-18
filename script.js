@@ -51,8 +51,8 @@ function preprocessCanvas(canvas) {
       .div(255.0)                                    // Нормализуем значения пикселей
       .expandDims(0);                                // Добавляем размерность batch (форма [1, 28, 28, 1])
 
-    console.log('Входной тензор:', imageTensor.arraySync());
-    console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение
+    console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение для формы
+    console.log('Входной тензор:', tensor.arraySync()); // Отладочное сообщение для значений
     return tensor;
   });
 }
@@ -66,7 +66,7 @@ predictButton.addEventListener('click', async () => {
 
   // Получаем предсказание
   const imageTensor = preprocessCanvas(canvas);
-  console.log('Форма тензора:', imageTensor.shape);
+  console.log('Форма тензора:', imageTensor.shape); // Отладочное сообщение
   const prediction = await model.predict(imageTensor).data();
   const result = prediction.indexOf(Math.max(...prediction)); // Находим наиболее вероятную цифру
   resultSpan.textContent = result; // Показываем результат
