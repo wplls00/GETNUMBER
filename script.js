@@ -5,7 +5,6 @@ const clearButton = document.getElementById('clear-button');
 const predictButton = document.getElementById('predict-button');
 const resultSpan = document.getElementById('result');
 const statusSpan = document.getElementById('status');
-console.log('Входной тензор:', imageTensor.arraySync());
 let isDrawing = false;
 
 // Очищаем canvas белым цветом
@@ -51,7 +50,8 @@ function preprocessCanvas(canvas) {
       .toFloat()
       .div(255.0)                                    // Нормализуем значения пикселей
       .expandDims(0);                                // Добавляем размерность batch (форма [1, 28, 28, 1])
-    
+
+    console.log('Входной тензор:', imageTensor.arraySync());
     console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение
     return tensor;
   });
