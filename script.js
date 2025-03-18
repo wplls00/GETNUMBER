@@ -1,6 +1,3 @@
-// Очищаем canvas при загрузке страницы
-clearCanvas();
-
 // Получаем элементы страницы
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
@@ -16,6 +13,9 @@ function clearCanvas() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   console.log('Canvas очищен:', ctx.getImageData(0, 0, canvas.width, canvas.height).data.every(pixel => pixel === 255));
 }
+
+// Очищаем canvas при загрузке страницы
+clearCanvas();
 
 // Кнопка "Очистить"
 clearButton.addEventListener('click', () => {
