@@ -25,7 +25,7 @@ function draw(event) {
   const y = event.clientY - rect.top;
 
   ctx.fillStyle = '#000000'; // Чёрный цвет
-  ctx.fillRect(x, y, 25, 25); // Увеличиваем размер кисти до 25x25
+  ctx.fillRect(x, y, 8, 8); // Увеличиваем размер кисти до 25x25
 }
 
 // Загружаем модель как Graph Model
