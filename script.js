@@ -25,7 +25,7 @@ function draw(event) {
   const y = event.clientY - rect.top;
 
   ctx.fillStyle = '#000000'; // Чёрный цвет
-  ctx.fillRect(x, y, 25, 25); // Рисуем квадраты размером 15x15
+  ctx.fillRect(x, y, 25, 25); // Увеличиваем размер кисти до 25x25
 }
 
 // Загружаем модель как Graph Model
@@ -41,7 +41,6 @@ let model;
   }
 })();
 
-// Предобработка изображения
 function preprocessCanvas(canvas) {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   return tf.tidy(() => {
@@ -52,7 +51,7 @@ function preprocessCanvas(canvas) {
       .expandDims(0);                                // Добавляем размерность batch (форма [1, 28, 28, 1])
 
     console.log('Форма тензора:', tensor.shape);     // Отладочное сообщение для формы
-    console.log('Входной тензор:', tensor.arraySync()); // Отладочное сообщение для значений
+    console.log('Значения тензора:', tensor.arraySync()); // Отладочное сообщение для значений
     return tensor;
   });
 }
@@ -63,7 +62,31 @@ predictButton.addEventListener('click', async () => {
     alert('Модель ещё не загружена. Пожалуйста, подождите.');
     return;
   }
+function visualizeTensor(tensor) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 28;
+  canvas.height = 28;
+  const ctx = canvas.getContext('2d');
 
+  const imageData = ctx.createImageData(28, 28);
+  const data = tensor.reshape([28, 28]).arraySync();
+
+  for (let i = 0; i < 28; i++) {
+    for (let j = 0; j < 28; j++) {
+      const pixelValue = Math.floor(data[i][j] * 255);
+      const index = (i * 28 + j) * 4;
+      imageData.data[index] = pixelValue;     // R
+      imageData.data[index + 1] = pixelValue; // G
+      imageData.data[index + 2] = pixelValue; // B
+      imageData.data[index + 3] = 255;       // A
+    }
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  document.body.appendChild(canvas); // Добавляем canvas на страницу
+}
+  const tensor = preprocessCanvas(canvas);
+visualizeTensor(tensor);
   // Получаем предсказание
   const imageTensor = preprocessCanvas(canvas);
   console.log('Форма тензора:', imageTensor.shape); // Отладочное сообщение
